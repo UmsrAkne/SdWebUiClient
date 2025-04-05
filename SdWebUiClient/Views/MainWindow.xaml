@@ -39,12 +39,12 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="Prompt :" />
-            <TextBox Grid.Row="1" Text="" />
+            <TextBox Grid.Row="1" Text="{Binding ImageGenerationParameters.Prompt}" />
 
             <Border Grid.Row="2" Height="0" />
 
             <TextBlock Grid.Row="3" Text="Negative Prompt :" />
-            <TextBox Grid.Row="4" Text="" />
+            <TextBox Grid.Row="4" Text="{Binding ImageGenerationParameters.NegativePrompt}" />
         </Grid>
 
         <StackPanel
@@ -53,16 +53,32 @@
             Orientation="Horizontal">
 
             <TextBlock Text="Width :" />
-            <TextBox Width="50" Margin="5,0,30,0" />
+
+            <TextBox
+                Width="50"
+                Margin="5,0,30,0"
+                Text="{Binding ImageGenerationParameters.Width}" />
 
             <TextBlock Text="Height :" />
-            <TextBox Width="50" Margin="5,0,30,0" />
+
+            <TextBox
+                Width="50"
+                Margin="5,0,30,0"
+                Text="{Binding ImageGenerationParameters.Height}" />
 
             <TextBlock Text="Batch count :" />
-            <TextBox Width="50" Margin="5,0,30,0" />
+
+            <TextBox
+                Width="50"
+                Margin="5,0,30,0"
+                Text="{Binding ImageGenerationParameters.BatchCount}" />
 
             <TextBlock Text="Batch size :" />
-            <TextBox Width="50" Margin="5,0,30,0" />
+
+            <TextBox
+                Width="50"
+                Margin="5,0,30,0"
+                Text="{Binding ImageGenerationParameters.BatchSize}" />
         </StackPanel>
 
     </Grid>
