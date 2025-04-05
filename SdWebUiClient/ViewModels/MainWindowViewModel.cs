@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using System.Diagnostics;
+using Prism.Mvvm;
 using SdWebUiClient.Models;
 using SdWebUiClient.Utils;
 
@@ -6,7 +7,19 @@ namespace SdWebUiClient.ViewModels;
 
 public class MainWindowViewModel : BindableBase
 {
+    public MainWindowViewModel()
+    {
+        SetDummies();
+    }
+
     public AppVersionInfo AppVersionInfo { get; set; } = new ();
 
     public ImageGenerationParameters ImageGenerationParameters { get; set; } = new ();
+
+    [Conditional("DEBUG")]
+    private void SetDummies()
+    {
+        ImageGenerationParameters.Prompt = "generation Parameters, test, test1, test2";
+        ImageGenerationParameters.NegativePrompt = "negative Prompts, generation Parameters, test, test1, test2";
+    }
 }
