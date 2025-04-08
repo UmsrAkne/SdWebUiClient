@@ -64,6 +64,7 @@ namespace SdWebUiClientTest.Utils
                     + "height: 512\r\n"
                     + "batchSize: 1\r\n"
                     + "batchCount: 1\r\n"
+                    + "steps: 12\r\n"
                     + "seed: -1\r\n"
                 ;
 
