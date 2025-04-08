@@ -7,6 +7,9 @@ namespace SdWebUiClient.Services
 {
     public class ParameterFileWatcher
     {
+        private readonly TimeSpan debounceTime = TimeSpan.FromMilliseconds(300);
+        private DateTime lastReadTime = DateTime.MinValue;
+
         public void MonitorTempFile(string content)
         {
             // 一時ファイルの作成
@@ -26,6 +29,16 @@ namespace SdWebUiClient.Services
 
             watcher.Changed += (sender, e) =>
             {
+                var now = DateTime.Now;
+
+                // 最終更新から debounceTime 経過していないならスキップ
+                if (now - lastReadTime < debounceTime)
+                {
+                    return;
+                }
+
+                lastReadTime = now;
+
                 Console.WriteLine($"changed file: {e.FullPath}");
 
                 try
