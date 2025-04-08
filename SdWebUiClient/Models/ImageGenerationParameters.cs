@@ -10,6 +10,7 @@ namespace SdWebUiClient.Models
         private int height = 512;
         private int batchSize = 1;
         private int batchCount = 1;
+        private int seed = -1;
 
         public string Prompt { get => prompt; set => SetProperty(ref prompt, value); }
 
@@ -22,5 +23,7 @@ namespace SdWebUiClient.Models
         public int BatchSize { get => batchSize; set => SetProperty(ref batchSize, value); }
 
         public int BatchCount { get => batchCount; set => SetProperty(ref batchCount, value); }
+
+        public int Seed { get => seed; set => SetProperty(ref seed, value); }
     }
 }

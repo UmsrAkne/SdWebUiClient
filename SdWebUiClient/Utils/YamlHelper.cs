@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using SdWebUiClient.Models;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -21,8 +22,27 @@ namespace SdWebUiClient.Utils
 
         public static void SaveToYaml(ImageGenerationParameters parameters, string filePath)
         {
+            File.WriteAllText(filePath, ConvertToYaml(parameters));
+        }
+
+        public static string ConvertToYaml(ImageGenerationParameters parameters)
+        {
+            var prompt = parameters.Prompt;
+            prompt = FormatInput(prompt);
+            prompt = FormatBlock(prompt);
+
+            var negativePrompt = parameters.NegativePrompt;
+            negativePrompt = FormatInput(negativePrompt);
+            negativePrompt = FormatBlock(negativePrompt);
+
+            parameters.Prompt = string.Empty;
+            parameters.NegativePrompt = string.Empty;
             var yaml = Serializer.Serialize(parameters);
-            File.WriteAllText(filePath, yaml);
+
+            yaml = Regex.Replace(yaml, "^prompt: ''", $"prompt: |{Environment.NewLine}{prompt}");
+            yaml = Regex.Replace(yaml, "negativePrompt: ''", $"negativePrompt: |{Environment.NewLine}{negativePrompt}");
+
+            return yaml;
         }
 
         public static ImageGenerationParameters LoadFromYaml(string filePath)
@@ -37,6 +57,18 @@ namespace SdWebUiClient.Utils
             igp.Prompt = FormatInput(igp.Prompt);
             igp.NegativePrompt = FormatInput(igp.NegativePrompt);
             return igp;
+        }
+
+        private static string FormatBlock(string block)
+        {
+            var r = new StringReader(block);
+            block = string.Empty;
+            while (r.ReadLine() is { } line)
+            {
+                block += "  " + line + Environment.NewLine;
+            }
+
+            return block.TrimEnd();
         }
 
         private static string FormatInput(string input)
