@@ -10,32 +10,32 @@ namespace SdWebUiClient.Services
         public void MonitorTempFile(string content)
         {
             // 一時ファイルの作成
-            var tempFilePath = Path.GetTempFileName();
+            var fileInfo = new FileInfo("generationParams.yaml");
 
             // 内容を書き込む
-            File.WriteAllText(tempFilePath, content, Encoding.UTF8);
-            Console.WriteLine($"一時ファイル作成: {tempFilePath}");
+            File.WriteAllText(fileInfo.FullName, content, Encoding.UTF8);
+            Console.WriteLine($"create temp file. {fileInfo.FullName}");
 
             // FileSystemWatcher の設定
             var watcher = new FileSystemWatcher
             {
-                Path = Path.GetDirectoryName(tempFilePath)!,
-                Filter = Path.GetFileName(tempFilePath),
+                Path = Path.GetDirectoryName(fileInfo.FullName)!,
+                Filter = Path.GetFileName(fileInfo.FullName),
                 NotifyFilter = NotifyFilters.LastWrite,
             };
 
             watcher.Changed += (sender, e) =>
             {
-                Console.WriteLine($"ファイルが変更されました: {e.FullPath}");
+                Console.WriteLine($"changed file: {e.FullPath}");
 
                 try
                 {
-                    var updatedContent = File.ReadAllText(tempFilePath, Encoding.UTF8);
-                    Console.WriteLine($"新しい内容:\n{updatedContent}");
+                    var updatedContent = File.ReadAllText(fileInfo.FullName, Encoding.UTF8);
+                    Console.WriteLine($"new content:\n{updatedContent}");
                 }
                 catch (IOException)
                 {
-                    Console.WriteLine("読み込みに失敗しました。別プロセスがファイルをロックしている可能性があります。");
+                    Console.WriteLine("Read failed. Another process may have locked the file.");
                 }
             };
 
@@ -44,7 +44,7 @@ namespace SdWebUiClient.Services
             var psi = new ProcessStartInfo
             {
                 FileName = @"C:\Program Files\Vim\vim91\gvim.exe",
-                Arguments = $"\"{tempFilePath}\"",
+                Arguments = $"\"{fileInfo.FullName}\"",
                 UseShellExecute = false,
                 CreateNoWindow = true,
             };
@@ -52,11 +52,11 @@ namespace SdWebUiClient.Services
             try
             {
                 Process.Start(psi);
-                Console.WriteLine("gvim を起動しました。");
+                Console.WriteLine("start gvim");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"gvim の起動に失敗しました: {ex.Message}");
+                Console.WriteLine($"failed to start gvim: {ex.Message}");
             }
         }
     }
