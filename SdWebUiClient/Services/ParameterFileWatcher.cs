@@ -2,6 +2,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using SdWebUiClient.Models;
+using SdWebUiClient.Utils;
+using YamlDotNet.Core;
 
 namespace SdWebUiClient.Services
 {
@@ -10,13 +13,13 @@ namespace SdWebUiClient.Services
         private readonly TimeSpan debounceTime = TimeSpan.FromMilliseconds(300);
         private DateTime lastReadTime = DateTime.MinValue;
 
-        public void MonitorTempFile(string content)
+        public void MonitorTempFile(ImageGenerationParameters imageGenerationParameters)
         {
             // 一時ファイルの作成
             var fileInfo = new FileInfo("generationParams.yaml");
 
             // 内容を書き込む
-            File.WriteAllText(fileInfo.FullName, content, Encoding.UTF8);
+            File.WriteAllText(fileInfo.FullName, YamlHelper.ConvertToYaml(imageGenerationParameters), Encoding.UTF8);
             Console.WriteLine($"create temp file. {fileInfo.FullName}");
 
             // FileSystemWatcher の設定
@@ -45,10 +48,19 @@ namespace SdWebUiClient.Services
                 {
                     var updatedContent = File.ReadAllText(fileInfo.FullName, Encoding.UTF8);
                     Console.WriteLine($"new content:\n{updatedContent}");
+
+                    var newParameters = YamlHelper.LoadFromYaml(fileInfo.FullName);
+                    imageGenerationParameters.Prompt = newParameters.Prompt;
+                    imageGenerationParameters.NegativePrompt = newParameters.NegativePrompt;
                 }
                 catch (IOException)
                 {
                     Console.WriteLine("Read failed. Another process may have locked the file.");
+                }
+                catch (SemanticErrorException se)
+                {
+                    Console.WriteLine("Read failed. Invalid yaml format.");
+                    Console.WriteLine(se.Message);
                 }
             };
 

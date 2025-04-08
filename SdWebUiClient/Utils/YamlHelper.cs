@@ -45,12 +45,22 @@ namespace SdWebUiClient.Utils
             return yaml;
         }
 
+        /// <summary>
+        /// 指定した yaml ファイルを読み込んで、テキストをフォーマット。ImageGenerationParameters に変換します。
+        /// </summary>
+        /// <param name="filePath">yaml ファイルのパス</param>
+        /// <returns>yaml ファイルから変換されたオブジェクト。</returns>
         public static ImageGenerationParameters LoadFromYaml(string filePath)
         {
             var yaml = File.ReadAllText(filePath);
             return ConvertFromYaml(yaml);
         }
 
+        /// <summary>
+        /// 指定した yaml のテキストを ImageGenerationParameters に変換します。
+        /// </summary>
+        /// <param name="yamlText">yaml のフォーマットに沿ったテキスト</param>
+        /// <returns>yaml テキストから変換されたオブジェクト。</returns>
         public static ImageGenerationParameters ConvertFromYaml(string yamlText)
         {
             var igp = Deserializer.Deserialize<ImageGenerationParameters>(yamlText);
