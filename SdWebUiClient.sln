@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SdWebUiClient", "SdWebUiClient\SdWebUiClient.csproj", "{159CB913-22A4-47D0-A855-FFD32B89EBCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SdWebUiClientTest", "SdWebUiClientTest\SdWebUiClientTest.csproj", "{0A855137-0DB8-4132-89DB-C83BD134F8C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{159CB913-22A4-47D0-A855-FFD32B89EBCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{159CB913-22A4-47D0-A855-FFD32B89EBCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{159CB913-22A4-47D0-A855-FFD32B89EBCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A855137-0DB8-4132-89DB-C83BD134F8C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A855137-0DB8-4132-89DB-C83BD134F8C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A855137-0DB8-4132-89DB-C83BD134F8C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A855137-0DB8-4132-89DB-C83BD134F8C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
