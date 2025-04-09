@@ -10,6 +10,8 @@ namespace SdWebUiClient.Services
 {
     public class ParameterFileWatcher
     {
+        public event EventHandler ParameterFileChanged;
+
         private readonly TimeSpan debounceTime = TimeSpan.FromMilliseconds(300);
         private DateTime lastReadTime = DateTime.MinValue;
 
@@ -43,6 +45,7 @@ namespace SdWebUiClient.Services
                 lastReadTime = now;
 
                 Console.WriteLine($"changed file: {e.FullPath}");
+                ParameterFileChanged?.Invoke(sender, e);
 
                 try
                 {

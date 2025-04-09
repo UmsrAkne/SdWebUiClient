@@ -10,6 +10,18 @@ public class MainWindowViewModel : BindableBase
     public MainWindowViewModel()
     {
         SetDummies();
+
+        ParameterFileWatcher.ParameterFileChanged += (sender, args) =>
+        {
+            _ = GenRequestDispatcher.RequestT2I(ImageGenerationParameters).ContinueWith(
+                t =>
+                {
+                    if (t.Exception != null)
+                    {
+                        Console.WriteLine("Image Generation Failed.");
+                    }
+                }, TaskContinuationOptions.OnlyOnFaulted);
+        };
     }
 
     public AppVersionInfo AppVersionInfo { get; set; } = new ();
