@@ -48,5 +48,29 @@ namespace SdWebUiClient.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+
+        public static async Task GetProgress()
+        {
+            try
+            {
+                var url = "http://127.0.0.1:7860/sdapi/v1/progress?skip_current_image=false";
+
+                // リクエスト送信
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Accept", "application/json");
+
+                using var httpClient = new HttpClient();
+
+                var response = await httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("response:\n" + json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error: " + ex.Message);
+            }
+        }
     }
 }
