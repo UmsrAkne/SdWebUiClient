@@ -7,12 +7,95 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:SdWebUiClient.ViewModels"
     Title="{Binding AppVersionInfo.Title}"
-    Width="525"
-    Height="350"
+    Width="1024"
+    Height="600"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
-    <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+
+    <Window.InputBindings>
+        <KeyBinding
+            Key="E"
+            Command="{Binding OpenEditorCommand}"
+            Modifiers="Control" />
+
+        <KeyBinding
+            Key="P"
+            Command="{Binding GetProgressCommand}"
+            Modifiers="Control" />
+    </Window.InputBindings>
+
+    <Grid Margin="5">
+
+        <Grid.Resources>
+            <Style TargetType="TextBox">
+                <Setter Property="Background" Value="WhiteSmoke" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="AcceptsReturn" Value="True" />
+            </Style>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="8" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Prompt :" />
+            <TextBox Grid.Row="1" Text="{Binding ImageGenerationParameters.Prompt}" />
+
+            <Border Grid.Row="2" Height="0" />
+
+            <TextBlock Grid.Row="3" Text="Negative Prompt :" />
+            <TextBox Grid.Row="4" Text="{Binding ImageGenerationParameters.NegativePrompt}" />
+        </Grid>
+
+        <DockPanel Grid.Row="2" Margin="0,8">
+            <StackPanel Orientation="Horizontal">
+
+                <TextBlock Text="Width :" />
+
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.Width}" />
+
+                <TextBlock Text="Height :" />
+
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.Height}" />
+
+                <TextBlock Text="Batch count :" />
+
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.BatchCount}" />
+
+                <TextBlock Text="Batch size :" />
+
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.BatchSize}" />
+            </StackPanel>
+
+            <Button
+                Padding="20,2"
+                HorizontalAlignment="Right"
+                Command="{Binding RequestGenImageAsyncCommand}"
+                Content="Generate" />
+        </DockPanel>
     </Grid>
 </Window>
