@@ -45,7 +45,6 @@ namespace SdWebUiClient.Services
                 lastReadTime = now;
 
                 Console.WriteLine($"changed file: {e.FullPath}");
-                ParameterFileChanged?.Invoke(sender, e);
 
                 try
                 {
@@ -55,6 +54,10 @@ namespace SdWebUiClient.Services
                     var newParameters = YamlHelper.LoadFromYaml(fileInfo.FullName);
                     imageGenerationParameters.Prompt = newParameters.Prompt;
                     imageGenerationParameters.NegativePrompt = newParameters.NegativePrompt;
+                    imageGenerationParameters.Width = newParameters.Width;
+                    imageGenerationParameters.Height = newParameters.Height;
+                    imageGenerationParameters.BatchCount = newParameters.BatchCount;
+                    imageGenerationParameters.BatchSize = newParameters.BatchSize;
                 }
                 catch (IOException)
                 {
@@ -65,6 +68,8 @@ namespace SdWebUiClient.Services
                     Console.WriteLine("Read failed. Invalid yaml format.");
                     Console.WriteLine(se.Message);
                 }
+
+                ParameterFileChanged?.Invoke(sender, e);
             };
 
             watcher.EnableRaisingEvents = true;

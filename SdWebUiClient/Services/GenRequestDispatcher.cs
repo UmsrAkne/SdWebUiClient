@@ -19,6 +19,10 @@ namespace SdWebUiClient.Services
             {
                 prompt = parameters.Prompt,
                 steps = parameters.Steps,
+                width = parameters.Width,
+                height = parameters.Height,
+                batchSize = parameters.BatchSize,
+                batchCount = parameters.BatchCount,
             };
 
             using var httpClient = new HttpClient();
@@ -49,7 +53,7 @@ namespace SdWebUiClient.Services
             }
         }
 
-        public static async Task GetProgress()
+        public static async Task<ProgressResponse> GetProgress()
         {
             try
             {
@@ -65,11 +69,17 @@ namespace SdWebUiClient.Services
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("response:\n" + json);
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, };
+                var result = JsonSerializer.Deserialize<ProgressResponse>(json, options);
+                return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("error: " + ex.Message);
+                return new ProgressResponse()
+                {
+                   TextInfo = "Generation Failed.",
+                };
             }
         }
     }

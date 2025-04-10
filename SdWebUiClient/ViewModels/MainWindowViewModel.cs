@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Threading;
 using Prism.Commands;
 using Prism.Mvvm;
 using SdWebUiClient.Commands;
@@ -10,6 +12,8 @@ namespace SdWebUiClient.ViewModels;
 
 public class MainWindowViewModel : BindableBase
 {
+    private readonly DispatcherTimer dispatcherTimer = new ();
+
     public MainWindowViewModel()
     {
         SetDummies();
@@ -18,6 +22,14 @@ public class MainWindowViewModel : BindableBase
         {
             RequestGenImageAsyncCommand.Execute(null);
         };
+
+        dispatcherTimer.Interval = TimeSpan.FromSeconds(3);
+        dispatcherTimer.Tick += (_, _) =>
+        {
+            GetProgressCommand.Execute(null);
+        };
+
+        dispatcherTimer.Start();
     }
 
     public AppVersionInfo AppVersionInfo { get; set; } = new ();
@@ -38,7 +50,8 @@ public class MainWindowViewModel : BindableBase
 
     public AsyncDelegateCommand GetProgressCommand => new (async () =>
     {
-        await GenRequestDispatcher.GetProgress();
+        var progress = await GenRequestDispatcher.GetProgress();
+        Console.WriteLine(progress.Progress);
     });
 
     [Conditional("DEBUG")]
