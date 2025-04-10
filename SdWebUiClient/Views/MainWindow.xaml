@@ -18,6 +18,11 @@
             Key="E"
             Command="{Binding OpenEditorCommand}"
             Modifiers="Control" />
+
+        <KeyBinding
+            Key="P"
+            Command="{Binding GetProgressCommand}"
+            Modifiers="Control" />
     </Window.InputBindings>
 
     <Grid Margin="5">
@@ -54,39 +59,43 @@
             <TextBox Grid.Row="4" Text="{Binding ImageGenerationParameters.NegativePrompt}" />
         </Grid>
 
-        <StackPanel
-            Grid.Row="2"
-            Margin="0,8"
-            Orientation="Horizontal">
+        <DockPanel Grid.Row="2" Margin="0,8">
+            <StackPanel Orientation="Horizontal">
 
-            <TextBlock Text="Width :" />
+                <TextBlock Text="Width :" />
 
-            <TextBox
-                Width="50"
-                Margin="5,0,30,0"
-                Text="{Binding ImageGenerationParameters.Width}" />
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.Width}" />
 
-            <TextBlock Text="Height :" />
+                <TextBlock Text="Height :" />
 
-            <TextBox
-                Width="50"
-                Margin="5,0,30,0"
-                Text="{Binding ImageGenerationParameters.Height}" />
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.Height}" />
 
-            <TextBlock Text="Batch count :" />
+                <TextBlock Text="Batch count :" />
 
-            <TextBox
-                Width="50"
-                Margin="5,0,30,0"
-                Text="{Binding ImageGenerationParameters.BatchCount}" />
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.BatchCount}" />
 
-            <TextBlock Text="Batch size :" />
+                <TextBlock Text="Batch size :" />
 
-            <TextBox
-                Width="50"
-                Margin="5,0,30,0"
-                Text="{Binding ImageGenerationParameters.BatchSize}" />
-        </StackPanel>
+                <TextBox
+                    Width="50"
+                    Margin="5,0,30,0"
+                    Text="{Binding ImageGenerationParameters.BatchSize}" />
+            </StackPanel>
 
+            <Button
+                Padding="20,2"
+                HorizontalAlignment="Right"
+                Command="{Binding RequestGenImageAsyncCommand}"
+                Content="Generate" />
+        </DockPanel>
     </Grid>
 </Window>

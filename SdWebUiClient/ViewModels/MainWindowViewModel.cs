@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using Prism.Commands;
 using Prism.Mvvm;
+using SdWebUiClient.Commands;
 using SdWebUiClient.Models;
+using SdWebUiClient.Services;
 using SdWebUiClient.Utils;
 
 namespace SdWebUiClient.ViewModels;
@@ -11,22 +14,32 @@ public class MainWindowViewModel : BindableBase
     {
         SetDummies();
 
-        ParameterFileWatcher.ParameterFileChanged += (sender, args) =>
+        ParameterFileWatcher.ParameterFileChanged += (_, _) =>
         {
-            _ = GenRequestDispatcher.RequestT2I(ImageGenerationParameters).ContinueWith(
-                t =>
-                {
-                    if (t.Exception != null)
-                    {
-                        Console.WriteLine("Image Generation Failed.");
-                    }
-                }, TaskContinuationOptions.OnlyOnFaulted);
+            RequestGenImageAsyncCommand.Execute(null);
         };
     }
 
     public AppVersionInfo AppVersionInfo { get; set; } = new ();
 
     public ImageGenerationParameters ImageGenerationParameters { get; set; } = new ();
+
+    public ParameterFileWatcher ParameterFileWatcher { get; set; } = new ();
+
+    public DelegateCommand OpenEditorCommand => new DelegateCommand(() =>
+    {
+        ParameterFileWatcher.MonitorTempFile(ImageGenerationParameters);
+    });
+
+    public AsyncDelegateCommand RequestGenImageAsyncCommand => new AsyncDelegateCommand(async () =>
+    {
+        await GenRequestDispatcher.RequestT2I(ImageGenerationParameters);
+    });
+
+    public AsyncDelegateCommand GetProgressCommand => new (async () =>
+    {
+        await GenRequestDispatcher.GetProgress();
+    });
 
     [Conditional("DEBUG")]
     private void SetDummies()
