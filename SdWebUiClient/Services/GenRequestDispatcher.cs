@@ -21,10 +21,11 @@ namespace SdWebUiClient.Services
                 steps = parameters.Steps,
                 width = parameters.Width,
                 height = parameters.Height,
-                batchSize = parameters.BatchSize,
+                batch_size = parameters.BatchSize,
                 batchCount = parameters.BatchCount,
             };
 
+            var dir = CreateDirectory();
             using var httpClient = new HttpClient();
 
             try
@@ -36,16 +37,20 @@ namespace SdWebUiClient.Services
                 // レスポンスの JSON をパース
                 var json = await response.Content.ReadAsStringAsync();
                 var doc = JsonDocument.Parse(json);
-                var base64 = doc.RootElement.GetProperty("images")[0].GetString();
 
-                // base64 → バイナリ変換してファイル保存
-                if (base64 != null)
+                var count = 1;
+                foreach (var jsonElement in doc.RootElement.GetProperty("images").EnumerateArray())
                 {
-                    var imageBytes = Convert.FromBase64String(base64);
-                    await File.WriteAllBytesAsync("output.png", imageBytes);
-                }
+                    var b64 = jsonElement.GetString();
+                    if (b64 == null)
+                    {
+                        continue;
+                    }
 
-                Console.WriteLine("Image saved as output.png");
+                    var imageBytes = Convert.FromBase64String(b64);
+                    await File.WriteAllBytesAsync($"{dir}\\{DateTime.Now:HHmmss_}{count:00}.png", imageBytes);
+                    count++;
+                }
             }
             catch (Exception ex)
             {
@@ -81,6 +86,13 @@ namespace SdWebUiClient.Services
                    TextInfo = "Generation Failed.",
                 };
             }
+        }
+
+        private static DirectoryInfo CreateDirectory()
+        {
+            var outputDirectory = new DirectoryInfo($"output\\{DateTime.Today:yyyyMMdd}");
+            outputDirectory.Create();
+            return outputDirectory;
         }
     }
 }
