@@ -70,5 +70,18 @@ namespace SdWebUiClientTest.Utils
 
             Assert.That(actual, Is.EqualTo(expect));
         }
+
+        [TestCase("a:90", "(a:0.90),")]
+        [TestCase("a, b:90", "a, (b:0.90),")]
+        [TestCase("a:105", "(a:1.05),")]
+        [TestCase("a:90, b:80", "(a:0.90), (b:0.80),")]
+        [TestCase("a:90,\r\n b:80\r\n", "(a:0.90),\r\n(b:0.80),")]
+        [TestCase("(a:1.0)", "(a:1.0),")]
+        [TestCase("<a:1.0>", "<a:1.0>,")]
+        public void ConvertCustomWeightSyntax(string input, string expected)
+        {
+            var result = YamlHelper.ConvertCustomWeightSyntax(input);
+            Assert.That(result, Is.EqualTo(expected));
+        }
     }
 }

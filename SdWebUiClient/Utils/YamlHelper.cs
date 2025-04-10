@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -67,6 +68,59 @@ namespace SdWebUiClient.Utils
             igp.Prompt = FormatInput(igp.Prompt);
             igp.NegativePrompt = FormatInput(igp.NegativePrompt);
             return igp;
+        }
+
+        public static string ConvertCustomWeightSyntax(string prompt)
+        {
+            var r = string.Empty;
+            var sr = new StringReader(prompt);
+            while (sr.ReadLine() is { } line)
+            {
+                r += Result(line).Trim() + Environment.NewLine;
+            }
+
+            r = FormatInput(r);
+
+            return r;
+
+            string Result(string input)
+            {
+                var prompts = input.Split(",");
+                var resultList = new List<string>();
+                foreach (var p in prompts)
+                {
+                    var pt = p.Trim();
+
+                    // 元からの括弧付きはスキップ
+                    if ((pt.StartsWith("(") && pt.EndsWith(")")) || (pt.StartsWith("<") && pt.EndsWith(">")))
+                    {
+                        resultList.Add(p);
+                        continue;
+                    }
+
+                    var m = Regex.Match(pt, @"(.+:)(\d+)");
+                    if (!m.Success)
+                    {
+                        resultList.Add(p);
+                        continue;
+                    }
+
+                    if (!int.TryParse(m.Groups[2].Value, out var weight))
+                    {
+                        resultList.Add(p);
+                        continue;
+                    }
+
+                    if (weight >= 5)
+                    {
+                        var weightString = (weight / 100.0).ToString("F2");
+                        weightString = Regex.Replace(weightString, "0+$", "0");
+                        resultList.Add($"({m.Groups[1]}{weightString})");
+                    }
+                }
+
+                return string.Join(", ", resultList);
+            }
         }
 
         private static string FormatBlock(string block)
