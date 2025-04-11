@@ -52,6 +52,12 @@ public class MainWindowViewModel : BindableBase
 
     public AsyncDelegateCommand RequestGenImageAsyncCommand => new AsyncDelegateCommand(async () =>
     {
+        if (ImageGenerationParameters.HasInvalidValues())
+        {
+            Console.WriteLine("ImageGenerationParameters contains invalid value.");
+            return;
+        }
+
         await GenRequestDispatcher.RequestT2I(ImageGenerationParameters);
     });
 
