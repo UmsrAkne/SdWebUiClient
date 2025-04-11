@@ -32,14 +32,14 @@ public class AppVersionInfo : BindableBase
 
     private int MinorVersion { get; init; } = 1;
 
-    private int PatchVersion { get; init; } = 1;
+    private int PatchVersion { get; init; } = 2;
 
     // ReSharper disable once CommentTypo
 
     /// <summary>
     ///     最終アップデートの日付を `YYYYmmdd` のフォーマットで入力します。
     /// </summary>
-    public string Updated { get; init; } = "20250410";
+    public string Updated { get; init; } = "20250411";
 
     private string SuffixId { get; init; } = "a";
 
