@@ -15,6 +15,7 @@ namespace SdWebUiClient.Services
         private readonly TimeSpan debounceTime = TimeSpan.FromMilliseconds(300);
         private DateTime lastReadTime = DateTime.MinValue;
         private FileSystemWatcher watcher;
+        private Process editorProcess;
 
         public void MonitorTempFile(ImageGenerationParameters imageGenerationParameters)
         {
@@ -88,7 +89,7 @@ namespace SdWebUiClient.Services
 
             try
             {
-                Process.Start(psi);
+                editorProcess = Process.Start(psi);
                 Console.WriteLine("start gvim");
             }
             catch (Exception ex)
@@ -103,9 +104,15 @@ namespace SdWebUiClient.Services
             GC.SuppressFinalize(this);
         }
 
+        public void ExitEditor()
+        {
+            editorProcess?.Kill();
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             watcher.Dispose();
+            editorProcess.Dispose();
         }
     }
 }
