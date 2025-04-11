@@ -80,7 +80,7 @@ namespace SdWebUiClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error: " + ex.Message);
+                Console.WriteLine("error: Connection failed to server.");
                 return new ProgressResponse()
                 {
                    TextInfo = "Generation Failed.",
