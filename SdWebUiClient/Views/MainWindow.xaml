@@ -97,5 +97,9 @@
                 Command="{Binding RequestGenImageAsyncCommand}"
                 Content="Generate" />
         </DockPanel>
+
+        <Border Grid.Row="3">
+            <TextBlock Text="{Binding CurrentProgressResponse.Progress}" />
+        </Border>
     </Grid>
 </Window>

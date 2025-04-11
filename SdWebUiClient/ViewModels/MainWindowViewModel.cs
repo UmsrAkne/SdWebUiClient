@@ -13,6 +13,7 @@ namespace SdWebUiClient.ViewModels;
 public class MainWindowViewModel : BindableBase
 {
     private readonly DispatcherTimer dispatcherTimer = new ();
+    private ProgressResponse currentProgressResponse;
 
     public MainWindowViewModel()
     {
@@ -38,6 +39,12 @@ public class MainWindowViewModel : BindableBase
 
     public ParameterFileWatcher ParameterFileWatcher { get; set; } = new ();
 
+    public ProgressResponse CurrentProgressResponse
+    {
+        get => currentProgressResponse;
+        set => SetProperty(ref currentProgressResponse, value);
+    }
+
     public DelegateCommand OpenEditorCommand => new DelegateCommand(() =>
     {
         ParameterFileWatcher.MonitorTempFile(ImageGenerationParameters);
@@ -50,8 +57,8 @@ public class MainWindowViewModel : BindableBase
 
     public AsyncDelegateCommand GetProgressCommand => new (async () =>
     {
-        var progress = await GenRequestDispatcher.GetProgress();
-        Console.WriteLine(progress.Progress);
+        CurrentProgressResponse = await GenRequestDispatcher.GetProgress();
+        Console.WriteLine(CurrentProgressResponse.Progress);
     });
 
     [Conditional("DEBUG")]
