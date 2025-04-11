@@ -31,5 +31,10 @@ namespace SdWebUiClient.Models
                 return $"Progress : {Progress * 100:F0}%";
             }
         }
+
+        /// <summary>
+        /// このレスポンスの中に進行状況の情報が含まれているかどうかを取得します。
+        /// </summary>
+        public bool IsEmpty => StatusText == string.Empty;
     }
 }

@@ -99,7 +99,16 @@
         </DockPanel>
 
         <Border Grid.Row="3" Height="18">
-            <TextBlock Text="{Binding CurrentProgressResponse.StatusText}" />
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentProgressResponse.IsEmpty}" Value="False">
+                            <Setter Property="Background" Value="PowderBlue" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <TextBlock Padding="4,2" Text="{Binding CurrentProgressResponse.StatusText}" />
         </Border>
     </Grid>
 </Window>
