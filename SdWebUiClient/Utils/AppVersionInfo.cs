@@ -28,20 +28,20 @@ public class AppVersionInfo : BindableBase
         private set => SetProperty(ref title, value);
     }
 
-    public int MajorVersion { get; init; }
+    private int MajorVersion { get; init; } = 0;
 
-    public int MinorVersion { get; init; }
+    private int MinorVersion { get; init; } = 1;
 
-    public int PatchVersion { get; init; }
+    private int PatchVersion { get; init; } = 1;
 
     // ReSharper disable once CommentTypo
 
     /// <summary>
     ///     最終アップデートの日付を `YYYYmmdd` のフォーマットで入力します。
     /// </summary>
-    public string Updated { get; init; } = "";
+    public string Updated { get; init; } = "20250410";
 
-    public string SuffixId { get; init; } = "a";
+    private string SuffixId { get; init; } = "a";
 
     private string ProjectName { get; }
 
