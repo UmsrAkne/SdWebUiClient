@@ -23,7 +23,7 @@ public class MainWindowViewModel : BindableBase
             RequestGenImageAsyncCommand.Execute(null);
         };
 
-        dispatcherTimer.Interval = TimeSpan.FromSeconds(3);
+        dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
         dispatcherTimer.Tick += (_, _) =>
         {
             GetProgressCommand.Execute(null);
