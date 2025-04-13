@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SdWebUiClient.Models;
+using SdWebUiClient.Utils;
 
 namespace SdWebUiClient.Services
 {
@@ -14,11 +15,14 @@ namespace SdWebUiClient.Services
         {
             const string url = "http://127.0.0.1:7860/sdapi/v1/txt2img";
 
+            var p = PromptFormatter.FinalizeFormat(parameters.Prompt);
+            var np = PromptFormatter.FinalizeFormat(parameters.NegativePrompt);
+
             // リクエストボディの定義
             var payload = new
             {
-                prompt = parameters.Prompt,
-                steps = parameters.Steps,
+                prompt = p,
+                steps = np,
                 width = parameters.Width,
                 height = parameters.Height,
                 batch_size = parameters.BatchSize,
