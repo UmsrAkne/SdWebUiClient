@@ -18,5 +18,23 @@ namespace SdWebUiClient.Models
 
         [JsonPropertyName("textinfo")]
         public string? TextInfo { get; set; }
+
+        public string StatusText
+        {
+            get
+            {
+                if (Progress == 0)
+                {
+                    return string.Empty;
+                }
+
+                return $"Progress : {Progress * 100:F0}%";
+            }
+        }
+
+        /// <summary>
+        /// このレスポンスの中に進行状況の情報が含まれているかどうかを取得します。
+        /// </summary>
+        public bool IsEmpty => StatusText == string.Empty;
     }
 }

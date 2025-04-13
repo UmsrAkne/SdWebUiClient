@@ -28,5 +28,50 @@ namespace SdWebUiClient.Models
         public int Steps { get => steps; set => SetProperty(ref steps, value); }
 
         public int Seed { get => seed; set => SetProperty(ref seed, value); }
+
+        public bool HasInvalidValues()
+        {
+            if (Width < 64 || Width > 2560 || Width % 16 != 0)
+            {
+                return true;
+            }
+
+            if (Height < 64 || Height > 2560 || Height % 16 != 0)
+            {
+                return true;
+            }
+
+            // 総面積でこれを上回る画像は生成しない。
+            if (Width * Height > 2560 * 1680)
+            {
+                return true;
+            }
+
+            // バッチサイズは一般に小さな数。
+            if (BatchSize is < 1 or > 8)
+            {
+                return true;
+            }
+
+            // バッチ回数もそれほど多くしない。
+            if (BatchCount is < 1 or > 8)
+            {
+                return true;
+            }
+
+            if (Steps is < 5 or > 30)
+            {
+                return true;
+            }
+
+            // シードは -1（ランダム） か 0以上の値を許可
+            if (Seed < -1)
+            {
+                return true;
+            }
+
+            // すべて妥当
+            return false;
+        }
     }
 }
