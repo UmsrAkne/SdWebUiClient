@@ -98,17 +98,48 @@
                 Content="Generate" />
         </DockPanel>
 
-        <Border Grid.Row="3" Height="18">
+        <Border
+            Grid.Row="3"
+            Height="22"
+            Padding="8,2"
+            BorderBrush="LightGray"
+            BorderThickness="0,1,0,0"
+            CornerRadius="4">
+
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding CurrentProgressResponse.IsEmpty}" Value="False">
-                            <Setter Property="Background" Value="PowderBlue" />
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Offset="0" Color="LightBlue" />
+                                        <GradientStop Offset="1" Color="LightSteelBlue" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
                         </DataTrigger>
+
+                        <DataTrigger Binding="{Binding CurrentProgressResponse.IsEmpty}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Offset="0" Color="AliceBlue" />
+                                        <GradientStop Offset="1" Color="WhiteSmoke" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+
+
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <TextBlock Padding="4,2" Text="{Binding CurrentProgressResponse.StatusText}" />
+            <TextBlock
+                Padding="4,0"
+                FontWeight="SemiBold"
+                Foreground="DarkSlateGray"
+                Text="{Binding CurrentProgressResponse.StatusText}" />
         </Border>
     </Grid>
 </Window>
