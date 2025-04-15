@@ -30,7 +30,7 @@ public class AppVersionInfo : BindableBase
 
     private int MajorVersion { get; init; } = 0;
 
-    private int MinorVersion { get; init; } = 2;
+    private int MinorVersion { get; init; } = 3;
 
     private int PatchVersion { get; init; } = 0;
 
@@ -39,7 +39,7 @@ public class AppVersionInfo : BindableBase
     /// <summary>
     ///     最終アップデートの日付を `YYYYmmdd` のフォーマットで入力します。
     /// </summary>
-    public string Updated { get; init; } = "20250413";
+    public string Updated { get; init; } = "20250415";
 
     private string SuffixId { get; init; } = "a";
 

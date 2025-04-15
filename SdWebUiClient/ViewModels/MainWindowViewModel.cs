@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Threading;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -13,15 +14,17 @@ namespace SdWebUiClient.ViewModels;
 public class MainWindowViewModel : BindableBase
 {
     private readonly DispatcherTimer dispatcherTimer = new ();
+    private readonly GenRequestDispatcher genRequestDispatcher = new ();
     private ProgressResponse currentProgressResponse;
 
     public MainWindowViewModel()
     {
         SetDummies();
+        LoadDefault();
 
         ParameterFileWatcher.ParameterFileChanged += (_, _) =>
         {
-            RequestGenImageAsyncCommand.Execute(null);
+            RequestGenImageAsyncCommand.Execute();
         };
 
         dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
@@ -50,7 +53,7 @@ public class MainWindowViewModel : BindableBase
         ParameterFileWatcher.MonitorTempFile(ImageGenerationParameters);
     });
 
-    public AsyncDelegateCommand RequestGenImageAsyncCommand => new AsyncDelegateCommand(async () =>
+    public DelegateCommand RequestGenImageAsyncCommand => new DelegateCommand(() =>
     {
         if (ImageGenerationParameters.HasInvalidValues())
         {
@@ -58,14 +61,25 @@ public class MainWindowViewModel : BindableBase
             return;
         }
 
-        await GenRequestDispatcher.RequestT2I(ImageGenerationParameters);
+        genRequestDispatcher.EnqueueRequest(ImageGenerationParameters);
     });
 
     public AsyncDelegateCommand GetProgressCommand => new (async () =>
     {
-        CurrentProgressResponse = await GenRequestDispatcher.GetProgress();
+        CurrentProgressResponse = await genRequestDispatcher.GetProgress();
         Console.WriteLine(CurrentProgressResponse.Progress);
     });
+
+    private void LoadDefault()
+    {
+        var defaultT2IParameterFile = new FileInfo("yamlFiles/default_t2i_params.yaml");
+        if (!defaultT2IParameterFile.Exists)
+        {
+            YamlHelper.SaveToYaml(new ImageGenerationParameters(), defaultT2IParameterFile.FullName);
+        }
+
+        ImageGenerationParameters = YamlHelper.LoadFromYaml(defaultT2IParameterFile.FullName);
+    }
 
     [Conditional("DEBUG")]
     private void SetDummies()
