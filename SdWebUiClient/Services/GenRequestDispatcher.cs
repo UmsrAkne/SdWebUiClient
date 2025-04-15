@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SdWebUiClient.Events;
 using SdWebUiClient.Models;
 using SdWebUiClient.Utils;
 
@@ -11,6 +12,8 @@ namespace SdWebUiClient.Services
 {
     public class GenRequestDispatcher
     {
+        public static event EventHandler RequestCompleted;
+
         public async Task RequestT2I(ImageGenerationParameters parameters)
         {
             const string url = "http://127.0.0.1:7860/sdapi/v1/txt2img";
@@ -55,10 +58,13 @@ namespace SdWebUiClient.Services
                     await File.WriteAllBytesAsync($"{dir}\\{DateTime.Now:HHmmss_}{count:00}.png", imageBytes);
                     count++;
                 }
+
+                RequestCompleted?.Invoke(this, new RequestCompletedEventArgs(null));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+                RequestCompleted?.Invoke(this, new RequestCompletedEventArgs(ex));
             }
         }
 
