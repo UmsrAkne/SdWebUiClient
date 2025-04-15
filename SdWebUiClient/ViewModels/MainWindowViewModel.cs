@@ -24,7 +24,7 @@ public class MainWindowViewModel : BindableBase
 
         ParameterFileWatcher.ParameterFileChanged += (_, _) =>
         {
-            RequestGenImageAsyncCommand.Execute(null);
+            RequestGenImageAsyncCommand.Execute();
         };
 
         dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
@@ -53,7 +53,7 @@ public class MainWindowViewModel : BindableBase
         ParameterFileWatcher.MonitorTempFile(ImageGenerationParameters);
     });
 
-    public AsyncDelegateCommand RequestGenImageAsyncCommand => new AsyncDelegateCommand(async () =>
+    public DelegateCommand RequestGenImageAsyncCommand => new DelegateCommand(() =>
     {
         if (ImageGenerationParameters.HasInvalidValues())
         {
@@ -61,7 +61,7 @@ public class MainWindowViewModel : BindableBase
             return;
         }
 
-        await genRequestDispatcher.RequestT2I(ImageGenerationParameters);
+        genRequestDispatcher.EnqueueRequest(ImageGenerationParameters);
     });
 
     public AsyncDelegateCommand GetProgressCommand => new (async () =>
