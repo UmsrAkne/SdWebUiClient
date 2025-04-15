@@ -14,6 +14,7 @@ namespace SdWebUiClient.ViewModels;
 public class MainWindowViewModel : BindableBase
 {
     private readonly DispatcherTimer dispatcherTimer = new ();
+    private readonly GenRequestDispatcher genRequestDispatcher = new ();
     private ProgressResponse currentProgressResponse;
 
     public MainWindowViewModel()
@@ -60,12 +61,12 @@ public class MainWindowViewModel : BindableBase
             return;
         }
 
-        await GenRequestDispatcher.RequestT2I(ImageGenerationParameters);
+        await genRequestDispatcher.RequestT2I(ImageGenerationParameters);
     });
 
     public AsyncDelegateCommand GetProgressCommand => new (async () =>
     {
-        CurrentProgressResponse = await GenRequestDispatcher.GetProgress();
+        CurrentProgressResponse = await genRequestDispatcher.GetProgress();
         Console.WriteLine(CurrentProgressResponse.Progress);
     });
 

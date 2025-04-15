@@ -9,9 +9,9 @@ using SdWebUiClient.Utils;
 
 namespace SdWebUiClient.Services
 {
-    public static class GenRequestDispatcher
+    public class GenRequestDispatcher
     {
-        public static async Task RequestT2I(ImageGenerationParameters parameters)
+        public async Task RequestT2I(ImageGenerationParameters parameters)
         {
             const string url = "http://127.0.0.1:7860/sdapi/v1/txt2img";
 
@@ -62,7 +62,7 @@ namespace SdWebUiClient.Services
             }
         }
 
-        public static async Task<ProgressResponse> GetProgress()
+        public async Task<ProgressResponse> GetProgress()
         {
             try
             {
