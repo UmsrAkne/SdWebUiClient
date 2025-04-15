@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Threading;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -18,6 +19,7 @@ public class MainWindowViewModel : BindableBase
     public MainWindowViewModel()
     {
         SetDummies();
+        LoadDefault();
 
         ParameterFileWatcher.ParameterFileChanged += (_, _) =>
         {
@@ -66,6 +68,17 @@ public class MainWindowViewModel : BindableBase
         CurrentProgressResponse = await GenRequestDispatcher.GetProgress();
         Console.WriteLine(CurrentProgressResponse.Progress);
     });
+
+    private void LoadDefault()
+    {
+        var defaultT2IParameterFile = new FileInfo("yamlFiles/default_t2i_params.yaml");
+        if (!defaultT2IParameterFile.Exists)
+        {
+            YamlHelper.SaveToYaml(new ImageGenerationParameters(), defaultT2IParameterFile.FullName);
+        }
+
+        ImageGenerationParameters = YamlHelper.LoadFromYaml(defaultT2IParameterFile.FullName);
+    }
 
     [Conditional("DEBUG")]
     private void SetDummies()

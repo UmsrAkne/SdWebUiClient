@@ -23,6 +23,12 @@ namespace SdWebUiClient.Utils
 
         public static void SaveToYaml(ImageGenerationParameters parameters, string filePath)
         {
+            var directory = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             File.WriteAllText(filePath, ConvertToYaml(parameters));
         }
 
