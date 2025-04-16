@@ -114,13 +114,10 @@ namespace SdWebUiClient.Services
                     await File.WriteAllBytesAsync($"{dir}\\{DateTime.Now:HHmmss_}{count:00}.png", imageBytes);
                     count++;
                 }
-
-                RequestCompleted?.Invoke(this, new RequestCompletedEventArgs(null));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                RequestCompleted?.Invoke(this, new RequestCompletedEventArgs(ex));
             }
         }
 
